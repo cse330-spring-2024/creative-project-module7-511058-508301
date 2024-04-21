@@ -1,12 +1,38 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router'
 import styles from '../styles/Home.module.css';
+import { useState } from 'react';
 
 export default function Home() {
+  const router = useRouter()
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-
-
-
-  
+  const handleSubmit = (e) => {
+    // Prevent the default form submission
+    e.preventDefault();
+    // Send request to the server with username and password
+    // You can use fetch or any other library to make the request
+    // Example using fetch:
+    fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response from the server
+      // For example, you can redirect to another page
+      router.push('/about');
+    })
+    .catch(error => {
+      // Handle any errors that occurred during the request
+      console.error('Error:', error);
+    });
+  }
+//onSubmit={handleSubmit}
   return (
     <div className={styles.container}>
       <Head>
@@ -21,93 +47,18 @@ export default function Home() {
         <form>
           <label>
             Username:
-            <input type="text" name="username" />
+            <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
           </label>
           <label>
             Password:
-            <input type="password" name="password" />
+            <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </label>
-          <button type="submit">Login</button>
+          <button type="submit" onClick={() => router.push('/supabasetest/supabasetest')}>Login</button>
         </form>
+        <button type="submit" onClick={() => router.push('/supabasetest/supabasetest')}>Login</button>
       </main>
 
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family:
-            Menlo,
-            Monaco,
-            Lucida Console,
-            Liberation Mono,
-            DejaVu Sans Mono,
-            Bitstream Vera Sans Mono,
-            Courier New,
-            monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            Segoe UI,
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            Fira Sans,
-            Droid Sans,
-            Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+      {/* Rest of the code */}
     </div>
   );
 }
