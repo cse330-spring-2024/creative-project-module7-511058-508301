@@ -3,6 +3,10 @@ import SpotifyApi from 'spotify-web-api-node';
 const scopes = [
     "streaming",
     "user-read-playback-state",
+    "playlist-read-private",
+    "playlist-read-collaborative",
+    "playlist-modify-private",
+
 ].join(',');
 
 const params= {

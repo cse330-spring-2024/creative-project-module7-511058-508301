@@ -1,12 +1,12 @@
-import Sidebar from './components/Sidebar';
+import Sidebar from '/components/Sidebar';
+import Center from '/components/Center';
 
 export default function Room() {
   return(
-  <div className="">
-    <h1>Music Room</h1>
-    <main>
+  <div className="bg-black">
+    <main className="flex">
       <Sidebar />
-      {/*Center*/}
+      <Center />
     </main>
     <div>{/*Player*/}</div>
   </div>    
