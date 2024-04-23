@@ -1,5 +1,6 @@
 import Sidebar from '/components/Sidebar';
 import Center from '/components/Center';
+// import Search from '/components/Search';
 
 export default function Room() {
   return(
@@ -7,6 +8,7 @@ export default function Room() {
     <main className="flex">
       <Sidebar />
       <Center />
+      {/* <Search /> */}
     </main>
     <div>{/*Player*/}</div>
   </div>    
