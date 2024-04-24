@@ -20,18 +20,19 @@ function Center() {
     const [color, setColor] = useState(null);
     const spotifyApi = useSpotify();
     const [playlist, setPlaylist] = useState(null);
-    const [searchResults, setSearchResults] = useState([]);
+    const [currentPlaylistId, setCurrentPlaylistId] = useState([]);
 
-    console.log(session);
+    // console.log(session);
 
     useEffect(() => {
         setColor(shuffle(colors).pop());
-    },[])
+    },[]);
 
     useEffect(()=>{
+        const playlistId = sessionStorage.getItem('currentPlaylistId');
+        if (!playlistId) return;
         if (spotifyApi.getAccessToken()){
-            const playlistId = sessionStorage.getItem('currentPlaylistId');
-            if (!playlistId) return;
+            
           spotifyApi.getPlaylist(playlistId).then((data) => {
             setPlaylist(data.body);
           });
@@ -39,7 +40,20 @@ function Center() {
       
       }, [session, spotifyApi]);
 
-    console.log(playlist);
+    useEffect(() => {
+        window.addEventListener('storage', () => {
+            const playlistId = sessionStorage.getItem('currentPlaylistId');
+            if (!playlistId) return;
+            if (spotifyApi.getAccessToken()){
+                
+                spotifyApi.getPlaylist(playlistId).then((data) => {
+                setPlaylist(data.body);
+              });
+            }
+        });
+    }, [session, spotifyApi]);
+
+    // console.log(playlist);
 
   return (
     <div className="flex-grow">
@@ -60,14 +74,17 @@ function Center() {
             <div className="flex flex-col items-center"></div>
         </section>
 
-        {/* {playlist.tracks.items.map((track) => (
-              <p key={track.track.id} className="cursor-pointer hover:text-white" onClick={() => {
+        {playlist?.tracks.items.map((track) => (
+              <p key={track.track.id} className="cursor-pointer text-gray-500 hover:text-white" onClick={() => {
                 sessionStorage.setItem('currentTrack', track.track.id);
                 console.log(`Current track is ${track.track.name}`);
+                spotifyApi.play({uris: [`${track.track.uri}`]}).catch((err) => {
+                    console.error(`We have a situation: ${err}`);
+                });
               }}>
-                {playlist.name}
+                {track.track.name}
               </p>
-          ))} */}
+          ))}
     </div>
   )
 }

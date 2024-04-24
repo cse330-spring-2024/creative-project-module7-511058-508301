@@ -1,6 +1,9 @@
 import Sidebar from '/components/Sidebar';
 import Center from '/components/Center';
+import SearchBar from '/components/SearchBar';
 // import Search from '/components/Search';
+// import { useEffect, useState } from 'react';
+// import { supabase } from '../hooks/supabaseClient';
 
 export default function Room() {
   return(
@@ -8,8 +11,8 @@ export default function Room() {
     <main className="flex">
       <Sidebar />
       <Center />
-      {/* <Search /> */}
     </main>
+    <div><SearchBar /></div>
     <div>{/*Player*/}</div>
   </div>    
   );

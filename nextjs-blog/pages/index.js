@@ -1,4 +1,4 @@
-import { getProviders, signIn } from "next-auth/react";
+import { getProviders, getSession, signIn } from "next-auth/react";
 
 function Login({providers}){
     return (
@@ -19,12 +19,14 @@ function Login({providers}){
 
 export default Login;
 
-export async function getServerSideProps(){
+export async function getServerSideProps(context){
     const providers = await getProviders();
+    const session = await getSession(context);
     console.log(providers);
     return{
         props: {
             providers,
+            session
         },
     };
 }

@@ -2,13 +2,34 @@ import React from 'react'
 import { signOut, useSession } from 'next-auth/react'
 import useSpotify from '../hooks/useSpotify';
 import { useEffect, useState } from 'react';
-// import { playlistState } from '../atoms/playlistAtom';
-
+import { useRecoilState } from 'recoil';
+import { playlistIdState } from '../atoms/playlistAtom';
+import { supabase } from '../hooks/supabaseClient';
+//import RealTimeUsers from './realtime';
+import RealTimeRooms from './RealTime';
 
 function Sidebar() {
+  // const [currentPlaylistId, setCurrentPlaylistId] = useRecoilState(playlistIdState);
   const spotifyApi = useSpotify();
   const {data: session, status} = useSession();
   const [playlists, setPlaylists] = useState([]);
+
+  //gathers rooms from supabase
+  const [rooms, setRooms] = useState([]);
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const { data: rooms, error } = await supabase.from('rooms').select();
+      console.log('Data:', rooms, 'Error:', error);
+      if (error) {
+        console.error(error);
+      } else {
+        setRooms(rooms);
+      }
+    };
+
+    fetchRooms();
+  }, []);
+
 
 
   useEffect(()=>{
@@ -20,7 +41,7 @@ function Sidebar() {
   
   }, [session, spotifyApi]);
 
-  console.log(playlists);
+  // console.log(playlists);
 
 
 
@@ -30,20 +51,19 @@ function Sidebar() {
             Music Room
         </h1>
         <div className="space-y-4">
-          <button className="flex items-center space-x-2 hover:text-white" onClick={() => signOut()}>
-            <p> Log out</p>
-          </button>
+          {/* Updates rooms in real time */}
+          <RealTimeRooms serverRooms={rooms} />
+        </div>
 
-
-          {playlists.map((playlist) => (
+        {playlists?.map((playlist) => (
               <p key={playlist.id} className="cursor-pointer hover:text-white" onClick={() => {
                 sessionStorage.setItem('currentPlaylistId', playlist.id);
+                window.dispatchEvent(new Event("storage"));
                 console.log(`Current playlist is ${playlist.name}`);
               }}>
                 {playlist.name}
               </p>
           ))}
-        </div>
     </div>
   )
 }
