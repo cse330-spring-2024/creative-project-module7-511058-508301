@@ -52,6 +52,13 @@ export default function RealTimeRooms({serverRooms} : {serverRooms: Room[]}) {
 
 function handleRoomClick(room: Room) {
     console.log('Room clicked');
+    if (room.room_password !== '') {
+        const password = prompt('Enter the password');
+        if (password !== room.room_password) {
+            alert('Wrong password');
+            return;
+        }
+    }
     window.dispatchEvent(new Event("joinRoom"));
     sessionStorage.setItem('room_id', room.room_id.toString());
 }

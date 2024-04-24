@@ -46,7 +46,11 @@ function Sidebar() {
 
 
   return (
-    <div className="text-gray-500 p-5 text-sm border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen">
+    <div className="text-gray-500 text-wrap p-5 text-sm border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen w-1/4">
+        <button className="hover:text-white" onClick={() => {
+            console.log("saved_songs event dispatched");
+            window.dispatchEvent(new Event("saved_songs"))
+          }}>Saved Songs</button>
         <h1>
             Music Room
         </h1>
